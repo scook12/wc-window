@@ -5,57 +5,45 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { IRenderItemProps } from "./components/wc-fixed-length-list/wc-fixed-length-list";
+import { VNode } from "@stencil/core";
+export { IRenderItemProps } from "./components/wc-fixed-length-list/wc-fixed-length-list";
+export { VNode } from "@stencil/core";
 export namespace Components {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first": string;
-        /**
-          * The last name
-         */
-        "last": string;
-        /**
-          * The middle name
-         */
-        "middle": string;
+    interface WcFixedLengthList {
+        "itemHeight": number;
+        "numItems": number;
+        "renderItem": (props: IRenderItemProps) => VNode;
+        "windowHeight": number;
     }
 }
 declare global {
-    interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
+    interface HTMLWcFixedLengthListElement extends Components.WcFixedLengthList, HTMLStencilElement {
     }
-    var HTMLMyComponentElement: {
-        prototype: HTMLMyComponentElement;
-        new (): HTMLMyComponentElement;
+    var HTMLWcFixedLengthListElement: {
+        prototype: HTMLWcFixedLengthListElement;
+        new (): HTMLWcFixedLengthListElement;
     };
     interface HTMLElementTagNameMap {
-        "my-component": HTMLMyComponentElement;
+        "wc-fixed-length-list": HTMLWcFixedLengthListElement;
     }
 }
 declare namespace LocalJSX {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first"?: string;
-        /**
-          * The last name
-         */
-        "last"?: string;
-        /**
-          * The middle name
-         */
-        "middle"?: string;
+    interface WcFixedLengthList {
+        "itemHeight"?: number;
+        "numItems"?: number;
+        "renderItem"?: (props: IRenderItemProps) => VNode;
+        "windowHeight"?: number;
     }
     interface IntrinsicElements {
-        "my-component": MyComponent;
+        "wc-fixed-length-list": WcFixedLengthList;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "wc-fixed-length-list": LocalJSX.WcFixedLengthList & JSXBase.HTMLAttributes<HTMLWcFixedLengthListElement>;
         }
     }
 }

@@ -1,0 +1,10 @@
+:host {
+  display: block;
+}
+
+#scroller {
+  overflow-y: auto;
+  width: 100%;
+  border: 2px solid;
+  position: 'relative';
+}
