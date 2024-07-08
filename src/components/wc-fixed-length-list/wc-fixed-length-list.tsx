@@ -1,5 +1,5 @@
-import { Component, Host, Listen, Prop, State, VNode, h } from '@stencil/core';
-
+import { Component, Host, Prop, State, VNode, h } from '@stencil/core';
+import testData from './test/testdata.json'
 
 export interface IRenderItemProps {
   index: number;
@@ -9,10 +9,20 @@ export interface IRenderItemProps {
     width: string;
   }
 }
-
-const renderBasicItem = (props: IRenderItemProps) => {
+// Monologue: This is a decent example of the kind of renderFunc we want to
+// be receiving, but I think that means it may be too narrow. How does
+// someone do this in VanillaJS easily? The signature may also be difficult
+// for consumers to match up with in TS (VNode as the return type, specifically).
+// Or maybe this is just a domain issue with creating broadly usable virtual
+// list components?
+const DemoRenderFunc = (props: IRenderItemProps) => {
   const { index, style } = props;
-  return <div style={style}>Row {index}</div>
+  const { name, gender, email, age } = testData[index]
+  return (
+    <div style={style}>
+      <p>POI: {name}, {gender} - aged {age}. Contact: {email}</p>
+    </div>
+  )
 }
 
 @Component({
@@ -22,9 +32,9 @@ const renderBasicItem = (props: IRenderItemProps) => {
 })
 export class WcFixedLengthList {
   @Prop() numItems: number
-  @Prop() itemHeight: number
-  @Prop() windowHeight: number
-  @Prop() renderItem: (props: IRenderItemProps) => VNode = renderBasicItem
+  @Prop() itemHeight: number // = 50
+  @Prop() windowHeight: number // = 400
+  @Prop() renderItem: (props: IRenderItemProps) => VNode = DemoRenderFunc
 
   @State() scrollTop: number = 0
 
@@ -62,7 +72,7 @@ export class WcFixedLengthList {
   }
 
 
-  onScroll(e: any) {
+  private onScroll(e: any) {
     this.scrollTop = e.currentTarget.scrollTop
   }
 

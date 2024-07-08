@@ -7,7 +7,7 @@ describe('wc-fixed-length-list', () => {
       components: [WcFixedLengthList],
       html: `<wc-fixed-length-list></wc-fixed-length-list>`,
     });
-    expect(page.root).toEqualHtml(`
+    expect(page.root).toEqualHtml(/*html*/`
       <wc-fixed-length-list>
         <mock:shadow-root>
           <slot></slot>
