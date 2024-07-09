@@ -1,5 +1,6 @@
-import { Component, Host, Prop, State, VNode, h } from '@stencil/core';
+import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 import testData from './test/testdata.json'
+import { ChildType } from '@stencil/core/internal';
 
 export interface IRenderItemProps {
   index: number;
@@ -14,7 +15,9 @@ export interface IRenderItemProps {
 // someone do this in VanillaJS easily? The signature may also be difficult
 // for consumers to match up with in TS (VNode as the return type, specifically).
 // Or maybe this is just a domain issue with creating broadly usable virtual
-// list components?
+// list components? providing a renderFunc outside of a pre-compiled component
+// module seems difficult even to test in e2e/spec tests, much less in a prod
+// situation. 
 const DemoRenderFunc = (props: IRenderItemProps) => {
   const { index, style } = props;
   const { name, gender, email, age } = testData[index]
@@ -31,12 +34,15 @@ const DemoRenderFunc = (props: IRenderItemProps) => {
   shadow: true,
 })
 export class WcFixedLengthList {
+  @Element() host: HTMLElement
   @Prop() numItems: number
-  @Prop() itemHeight: number // = 50
-  @Prop() windowHeight: number // = 400
-  @Prop() renderItem: (props: IRenderItemProps) => VNode = DemoRenderFunc
+  @Prop() itemHeight: number
+  @Prop() windowHeight: number
+  @Prop() renderItem: (props: IRenderItemProps) => ChildType = DemoRenderFunc
 
   @State() scrollTop: number = 0
+
+  private container?: HTMLDivElement
 
   private get innerHeight() {
     return this.numItems * this.itemHeight
@@ -54,7 +60,7 @@ export class WcFixedLengthList {
   }
 
   private get itemsToRender() {
-    const items = []
+    const items: ChildType[] = []
     const { itemHeight, startIndex, endIndex, renderItem } = this
     for (let i = startIndex; i <= endIndex; i++) {
       items.push(
@@ -72,17 +78,33 @@ export class WcFixedLengthList {
   }
 
 
-  private onScroll(e: any) {
+  private onScroll(e: any, isWheelEvent: boolean = false) {
     this.scrollTop = e.currentTarget.scrollTop
+    if (isWheelEvent) {
+      e.preventDefault()
+      this.container.scrollBy({
+        top: e.deltaY,
+        behavior: 'smooth',
+      })
+    }
   }
 
   render() {
     return (
       <Host>
-        <div id='container' style={{ overflowY: 'scroll', height: `${this.windowHeight}px` }} onScroll={(e) => this.onScroll(e)}>
-          <div id='scroller' style={{ position: 'relative', height: `${this.innerHeight}px`}}>
-            {this.itemsToRender}
-          </div>
+        <div 
+            id='container' 
+            ref={el => this.container = el} 
+            style={{ overflowY: 'scroll', height: `${this.windowHeight}px` }} 
+            onScroll={(e) => this.onScroll(e)}
+            onWheel={(e) => this.onScroll(e, true)}
+          >
+            <div 
+              id='scroller' 
+              style={{ position: 'relative', height: `${this.innerHeight}px`}}
+            >
+              {this.itemsToRender}
+            </div>
         </div>
       </Host>
     );

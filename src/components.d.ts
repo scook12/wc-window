@@ -6,14 +6,14 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { IRenderItemProps } from "./components/wc-fixed-length-list/wc-fixed-length-list";
-import { VNode } from "@stencil/core";
+import { ChildType } from "@stencil/core/internal";
 export { IRenderItemProps } from "./components/wc-fixed-length-list/wc-fixed-length-list";
-export { VNode } from "@stencil/core";
+export { ChildType } from "@stencil/core/internal";
 export namespace Components {
     interface WcFixedLengthList {
         "itemHeight": number;
         "numItems": number;
-        "renderItem": (props: IRenderItemProps) => VNode;
+        "renderItem": (props: IRenderItemProps) => ChildType;
         "windowHeight": number;
     }
 }
@@ -32,7 +32,7 @@ declare namespace LocalJSX {
     interface WcFixedLengthList {
         "itemHeight"?: number;
         "numItems"?: number;
-        "renderItem"?: (props: IRenderItemProps) => VNode;
+        "renderItem"?: (props: IRenderItemProps) => ChildType;
         "windowHeight"?: number;
     }
     interface IntrinsicElements {

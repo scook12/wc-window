@@ -6,4 +6,10 @@
   overflow-y: auto;
   width: 100%;
   position: 'relative';
+  scroll-snap-type: y mandatory;
+}
+
+@keyframes scroll {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-100%); }
 }
