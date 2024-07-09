@@ -1,4 +1,4 @@
-import { Component, Element, Host, Prop, State, h } from '@stencil/core';
+import { Component, Host, Prop, State, h } from '@stencil/core';
 import testData from './test/testdata.json'
 import { ChildType } from '@stencil/core/internal';
 
@@ -34,7 +34,6 @@ const DemoRenderFunc = (props: IRenderItemProps) => {
   shadow: true,
 })
 export class WcFixedLengthList {
-  @Element() host: HTMLElement
   @Prop() numItems: number
   @Prop() itemHeight: number
   @Prop() windowHeight: number
